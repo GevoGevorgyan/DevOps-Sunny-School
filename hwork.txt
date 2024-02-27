@@ -1,0 +1,35 @@
+Create launch template with user data install nginx
+
+aws ec2 create-launch-template     --launch-template-name gg-launch-template     --version-description "Initial version"     --launch-template-data '{
+        "InstanceType": "t2.micro",
+        "UserData": "IyEvYmluL2Jhc2gKYXB0LWdldCB1cGRhdGUKYXB0LWdldCBpbnN0YWxsIC15IG5naW54CnN5c3RlbWN0bCBzdGFydCBuZ2lueA==",
+        "ImageId": "ami-0440d3b780d96b29d"
+    }'
+
+create autoscaling group
+
+aws autoscaling create-auto-scaling-group
+ --auto-scaling-group-name gg-asg
+ --launch-template "LaunchTemplateName=gg-launch-template,Version=1"
+ --min-size 1 --max-size 3
+ --desired-capacity 1
+ --vpc-zone-identifier "subnet-03d6c24170a8b8dc1"
+
+create target group
+
+aws elbv2 create-target-group
+ --name gg-target-group
+ --protocol HTTP
+ --port 80
+ --vpc-id vpc-0799504f6df9624a0
+
+create alb 
+
+aws elbv2 create-load-balancer
+ --name gg-alb
+ --subnets  subnet-0e7d2aee4619a71ec, subnet-05ae843871970938d
+ --security-groups sg-05f74155cfabbf8ba
+ --scheme internet-facing
+ --type application
+  
+
