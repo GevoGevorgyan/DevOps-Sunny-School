@@ -41,3 +41,23 @@ aws s3api put-bucket-versioning --bucket gevogevorgyan-s3 --versioning-configura
 upload file in s3
 
 aws s3 cp hwork.txt s3://gevogevorgyan-s3
+
+create rds
+
+aws rds create-db-instance \
+    --db-instance-identifier gg-db \
+    --db-instance-class db.t2.micro \
+    --engine mysql \
+    --allocated-storage 20 \
+    --db-name ggdb \
+    --master-username admin \
+    --master-user-password 12345678 \
+    --vpc-security-group-ids sg-0289fd511afdd562f \
+    --storage-type gp2 \
+    --no-multi-az \
+    --no-publicly-accessible \
+    --enable-cloudwatch-logs-exports '["error","general","slowquery","audit"]' \
+    --backup-retention-period 7 \
+    --db-subnet-group-name default-vpc-0799504f6df9624a0 \
+    --tags Key=Name,Value=gg-db
+
