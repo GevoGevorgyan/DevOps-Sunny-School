@@ -33,3 +33,11 @@ aws elbv2 create-load-balancer
  --type application
   
 
+create s3 bucket enable versioning
+
+aws s3api create-bucket --bucket gevogevorgyan-s3 --region us-east-1
+aws s3api put-bucket-versioning --bucket gevogevorgyan-s3 --versioning-configurati>
+
+upload file in s3
+
+aws s3 cp hwork.txt s3://gevogevorgyan-s3
