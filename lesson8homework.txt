@@ -1,0 +1,65 @@
+create vpc 
+
+aws ec2 create-vpc
+--cidr-block 10.0.0.0/24
+--tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=gg-vpc}]'
+
+create public subnet
+
+aws ec2 create-subnet
+ --vpc-id vpc-0294da316e2c3f4f2
+ --cidr-block 10.0.1.0/24
+ --availability-zone us-east-1a
+ --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=gg-public-subnet}]'
+
+Create Internet Gateway (IG) and Attach to VPC
+
+aws ec2 create-internet-gateway
+aws ec2 create-tags
+ --resources igw-0188169f672f0e11b
+ --tags Key=Name,Value=gg-ig
+
+aws ec2 attach-internet-gateway
+ --internet-gateway-id igw-0188169f672f0e11b
+ --vpc-id vpc-0294da316e2c3f4f2
+
+Create Route Table for Public Subnet
+
+aws ec2 create-route-table --vpc-id vpc-0294da316e2c3f4f2
+aws ec2 create-tags
+ --resources rtb-07f114c4b75150f74
+ --tags Key=Name,Value=gg-route-table
+
+ aws ec2 create-route
+ --route-table-id rtb-07f114c4b75150f74
+ --destination-cidr-block 0.0.0.0/0
+ --gateway-id igw-0188169f672f0e11b
+
+
+Create Private Subnet
+
+
+aws ec2 create-subnet
+ --vpc-id vpc-0294da316e2c3f4f2
+--cidr-block 10.0.2.0/24
+--availability-zone us-east-1a
+--tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=gg-private-subnet}]'
+
+
+Create NAT Gateway
+
+aws ec2 create-nat-gateway
+ --subnet-id subnet-0327de9dba21177e0
+ --allocation-id eipalloc-0c406e23b59c6f66b
+
+
+Create Route Table for Private Subnet and Associate with Private Subnet
+
+aws ec2 create-route
+ --route-table-id rtb-0fb51d281e0f6bcc2
+ --destination-cidr-block 0.0.0.0/0
+ --nat-gateway-id nat-03b048388c133b825
+
+aws ec2 associate-route-table
+ --subnet-id subnet-04496acc4839f1c78
+ --route-table-id rtb-0fb51d281e0f6bcc2
